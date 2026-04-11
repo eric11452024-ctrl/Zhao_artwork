@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Works｜Zhao</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="logo" href="index.html">Zhao</a>
+  <nav class="nav">
+    <button class="nav-toggle" aria-label="menu">
+      <span class="hamburger"></span>
+    </button>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a class="active" href="works.html">Works</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page-narrow">
+  <header class="page-head">
+    <h1>作品</h1>
+    <p class="muted">以项目为单位展示，点击进入查看过程与细节。</p>
+  </header>
+
+  <!-- 分类与排序控制栏 -->
+  <div class="controls-bar">
+    <div class="filters" id="workFilters">
+      <button class="chip is-active" data-filter="all">全部</button>
+      <button class="chip" data-filter="prop">道具</button>
+      <button class="chip" data-filter="scene">场景</button>
+    </div>
+
+    <div class="sort-box">
+      <select id="workSort" class="sort-select">
+        <option value="newest">最新优先</option>
+        <option value="oldest">最早优先</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 项目卡片网格 -->
+  <section class="cards-grid" id="workGrid">
+    <a class="card" href="project.html?id=dragon-sculpt" data-cat="prop" data-year="202603">
+      <div class="card-img-wrap">
+        <img src="artwork_picture/dragon_show1.png" alt="龙｜雕刻练习" loading="lazy">
+      </div>
+      <div class="card-meta">
+        <h3>龙｜雕刻练习</h3>
+        <p>雕刻类资产</p>
+      </div>
+    </a>
+
+    <a class="card" href="project.html?id=altar-prop" data-cat="scene" data-year="202502">
+      <div class="card-img-wrap">
+        <img src="artwork_picture/table_show1.png" alt="供台｜场景资产" loading="lazy">
+      </div>
+      <div class="card-meta">
+        <h3>供台｜场景资产</h3>
+        <p>氛围型道具</p>
+      </div>
+    </a>
+
+    <a class="card" href="project.html?id=mechanism-relic" data-cat="prop" data-year="202508">
+      <div class="card-img-wrap">
+        <img src="artwork_picture/biggun_show1.png" alt="永劫无间｜莲心剑雨｜武器建模" loading="lazy">
+      </div>
+      <div class="card-meta">
+        <h3>永劫无间｜莲心剑雨｜武器建模</h3>
+        <p>武器 · 道具</p>
+      </div>
+    </a>
+
+    <a class="card" href="project.html?id=demon-blade" data-cat="prop" data-year="202512">
+      <div class="card-img-wrap">
+        <img src="artwork_picture/sword_show1.png" alt="永劫无间｜谪星狼主｜武器建模" loading="lazy">
+      </div>
+      <div class="card-meta">
+        <h3>永劫无间｜谪星狼主｜武器建模</h3>
+        <p>武器设计</p>
+      </div>
+    </a>
+
+    <a class="card" href="project.html?id=snake-staff" data-cat="prop" data-year="202504">
+      <div class="card-img-wrap">
+        <img src="artwork_picture/snake_show1.png" alt="蛇杖｜武器建模" loading="lazy">
+      </div>
+      <div class="card-meta">
+        <h3>蛇杖｜武器建模</h3>
+        <p>雕刻 · 武器</p>
+      </div>
+    </a>
+
+    <a class="card" href="project.html?id=retro-clock" data-cat="prop" data-year="202510">
+      <div class="card-img-wrap">
+        <img src="artwork_picture/clock_show1.png" alt="复古座钟｜场景道具" loading="lazy">
+      </div>
+      <div class="card-meta">
+        <h3>复古座钟｜场景道具</h3>
+        <p>过程展示图</p>
+      </div>
+    </a>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>© 2026 Zhao. All rights reserved.</p>
+</footer>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
