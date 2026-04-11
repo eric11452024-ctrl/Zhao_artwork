@@ -625,25 +625,17 @@ h1, h2, h3, h4 {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  padding: 24px;
   background: var(--bg-2);
-  position: relative;
 } 
 
 .carousel-item img {
-  display: block;
-  max-width: none;
-  max-height: none;
-}
-
-.carousel-item img.fit-by-width {
-  width: 100%;
-  height: auto;
-}
-
-.carousel-item img.fit-by-height {
+  max-width: 100%;
+  max-height: 100%;
   width: auto;
-  height: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
 }
 
 #btnPrev, #btnNext {
@@ -727,14 +719,6 @@ h1, h2, h3, h4 {
   color: #fff;
   margin-bottom: 12px;
 }
-
-.carousel-item { 
-  min-width: 100%; 
-  flex-shrink: 0; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-} 
 
 .carousel-item.is-viewer { 
   background: #000; 
