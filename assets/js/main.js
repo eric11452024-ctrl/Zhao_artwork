@@ -66,9 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
           const yearB = parseYearMonth(b.dataset.year);
 
           if (sortType === 'newest') {
-            return yearB - yearA; // 最新优先
+            return yearB - yearA; // 最新作品
           } else {
-            return yearA - yearB; // 最早优先
+            return yearA - yearB; // 最早作品
           }
         });
 
