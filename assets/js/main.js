@@ -91,8 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
       role: ['高模雕刻', '造型设计', '白模渲染'],
       tools: ['ZBrush', 'Maya', 'Marmoset Toolbag'],
       images: [
-        'artwork_picture/dragon_show1.png',
-        'artwork_picture/dragon_show2.png',
+        'artwork_picture/dragon_show1.webp',
+        'artwork_picture/dragon_show2.webp',
       ],
     },
     'demon-blade': {
@@ -103,8 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
       role: ['高低模制作', '材质贴图', '最终渲染'],
       tools: ['Maya', 'ZBrush', 'Substance Painter', 'Photoshop'],
       images: [
-        'artwork_picture/sword_show1.png',
-        'artwork_picture/sword_show2.png'
+        'artwork_picture/sword_show1.webp',
+        'artwork_picture/sword_show2.webp'
       ],
       viewer: 'artwork_picture/MVIEW/sword_3Dshow/sword_show3_3D.html'
     },
@@ -116,8 +116,8 @@ document.addEventListener('DOMContentLoaded', () => {
       role: ['概念细化', '硬表面建模', '材质表达'],
       tools: ['Maya', 'Substance Painter', 'Marmoset Toolbag'],
       images: [
-        'artwork_picture/biggun_show1.png',
-        'artwork_picture/biggun_show2.png',
+        'artwork_picture/biggun_show1.webp',
+        'artwork_picture/biggun_show2.webp',
       ],
       viewer: 'artwork_picture/MVIEW/biggun_3Dshow/biggun_3D.html'
     },
@@ -129,8 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
       role: ['高模雕刻', '低模拓扑', 'PBR 材质'],
       tools: ['ZBrush', 'Maya', 'Substance Painter'],
       images: [
-        'artwork_picture/snake_show1.png',
-        'artwork_picture/snake_show2.png',
+        'artwork_picture/snake_show1.webp',
+        'artwork_picture/snake_show2.webp',
       ],
       viewer: 'artwork_picture/MVIEW/snake_3Dshow/snake_3D.html'
     },
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
       role: ['场景搭建', '资产制作', '灯光渲染'],
       tools: ['Maya', 'ZBrush', 'Substance Painter', 'UE5'],
       images: [
-        'artwork_picture/table_show1.png',
+        'artwork_picture/table_show1.webp',
       ],
       viewer: 'artwork_picture/MVIEW/table_3Dshow/table_3D.html'  
     },
@@ -154,8 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
       role: ['硬表面建模', '材质贴图'],
       tools: ['Maya', 'Substance Painter', 'Marmoset Toolbag'],
       images: [
-        'artwork_picture/clock_show1.png',
-        'artwork_picture/clock_show2.png',
+        'artwork_picture/clock_show1.webp',
+        'artwork_picture/clock_show2.webp',
       ],
       viewer: 'artwork_picture/MVIEW/clock_3Dshow/clock_3D.html'
     }
