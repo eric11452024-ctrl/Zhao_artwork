@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'artwork_picture/sword_show1.png',
         'artwork_picture/sword_show2.png'
       ],
-      viewer: 'artwork_picture/MVIEW/sword3D/sword_show3_3D.html'
+      viewer: 'artwork_picture/MVIEW/sword_3Dshow/sword_show3_3D.html'
     },
     'mechanism-relic': {
       title: '永劫无间｜莲心剑雨｜武器建模',
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'artwork_picture/biggun_show1.png',
         'artwork_picture/biggun_show2.png',
       ],
-      viewer: 'assets/viewer/yourscene1.html'
+      viewer: 'artwork_picture/MVIEW/biggun_3Dshow/biggun_3D.html'
     },
     'snake-staff': {
       title: '蛇杖｜武器建模',
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'artwork_picture/clock_show1.png',
         'artwork_picture/clock_show2.png',
       ],
-      viewer: 'artwork_picture/MVIEW/table_3Dshow/clock_3D.html'
+      viewer: 'artwork_picture/MVIEW/clock_3Dshow/clock_3D.html'
     }
   };
 
