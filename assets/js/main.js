@@ -182,6 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Populate Carousel
     const track = document.getElementById('carouselTrack');
     const dotsContainer = document.getElementById('carouselDots');
+    const carousel = document.getElementById('mediaCarousel');
     
     if (track) {
       const mediaItems = [...data.images]; 
@@ -195,21 +196,26 @@ document.addEventListener('DOMContentLoaded', () => {
         mediaItems.forEach(item => { 
           const slide = document.createElement('div'); 
           slide.className = 'carousel-item'; 
+          const inner = document.createElement('div');
+          inner.className = 'carousel-item-inner';
         
           if (typeof item === 'string') { 
-            slide.innerHTML = `<img src="${item}" alt="${data.title} 展示图" loading="lazy">`; 
+            const img = document.createElement('img');
+            img.src = item;
+            img.alt = `${data.title} 展示图`;
+            img.loading = 'lazy';
+            inner.appendChild(img);
           } else if (item.type === 'viewer') { 
             slide.classList.add('is-viewer'); 
-            slide.innerHTML = ` 
-              <iframe 
-                src="${item.src}" 
-                title="${data.title} 3D Viewer" 
-                loading="lazy" 
-                allowfullscreen> 
-              </iframe> 
-            `; 
+            const iframe = document.createElement('iframe');
+            iframe.src = item.src;
+            iframe.title = `${data.title} 3D Viewer`;
+            iframe.loading = 'lazy';
+            iframe.allowFullscreen = true;
+            inner.appendChild(iframe);
           } 
-        
+
+          slide.appendChild(inner);
           track.appendChild(slide); 
         });
 
@@ -224,9 +230,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // Carousel Logic
         let currentIdx = 0;
         const total = mediaItems.length;
+
+        const getCarouselWidth = () => {
+          if (carousel) return carousel.clientWidth;
+          return track.clientWidth;
+        };
         
         const updateCarousel = () => {
-          track.style.transform = `translateX(-${currentIdx * 100}%)`;
+          const offset = getCarouselWidth() * currentIdx;
+          track.style.transform = `translateX(-${offset}px)`;
           if (total > 1) {
             document.querySelectorAll('.dot').forEach((d, i) => {
               d.classList.toggle('active', i === currentIdx);
@@ -250,6 +262,12 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCarousel();
           }
         });
+
+        window.addEventListener('resize', () => {
+          updateCarousel();
+        });
+
+        updateCarousel();
       } else {
         document.querySelector('.project-media').style.display = 'none';
       }
