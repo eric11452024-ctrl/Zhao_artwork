@@ -130,7 +130,7 @@ h1, h2, h3, h4 {
   height: 76px;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(to bottom, var(--bg) 0%, rgba(12, 13, 14, 0.85) 35%, rgba(12, 13, 14, 0.35) 68%, rgba(12, 13, 14, 0) 100%);
+  background: linear-gradient(to bottom, var(--bg) 0%, rgba(12, 13, 14, 0.65) 35%, rgba(12, 13, 14, 0.18) 68%, rgba(12, 13, 14, 0) 100%);
 }
 
 .logo {
@@ -234,7 +234,7 @@ h1, h2, h3, h4 {
   z-index: 2;
   pointer-events: none;
   background:
-    linear-gradient(to bottom, var(--bg), transparent clamp(48px, 7vw, 120px)),
+    linear-gradient(to bottom, rgba(12, 13, 14, 0.7), transparent clamp(48px, 7vw, 120px)),
     linear-gradient(to top, rgba(12, 13, 14, 0.7), transparent clamp(64px, 8vw, 140px)),
     linear-gradient(to right, var(--bg), transparent clamp(24px, 5vw, 96px)),
     linear-gradient(to left, var(--bg), transparent clamp(24px, 5vw, 96px));
@@ -899,7 +899,7 @@ h1, h2, h3, h4 {
     bottom: auto;
     aspect-ratio: 5082 / 2218;
     background:
-      linear-gradient(to bottom, var(--bg), transparent 28px),
+      linear-gradient(to bottom, rgba(12, 13, 14, 0.7), transparent 28px),
       linear-gradient(to top, var(--bg-2), transparent 36px),
       linear-gradient(to right, rgba(12, 13, 14, 0.65), transparent 18px),
       linear-gradient(to left, rgba(12, 13, 14, 0.65), transparent 18px);
