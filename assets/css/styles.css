@@ -570,6 +570,11 @@ h1, h2, h3, h4 {
   padding: 16px 4px;
 }
 
+.feature-card[href="project.html?id=cn-levelart-first"] img,
+.card[href="project.html?id=cn-levelart-first"] img {
+  object-position: 60% center;
+}
+
 .card-meta h3 {
   margin: 0 0 6px;
   font-size: 1.15rem;
