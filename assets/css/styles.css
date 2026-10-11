@@ -118,7 +118,9 @@ h1, h2, h3, h4 {
 }
 
 .home .site-header {
-  background: rgba(32, 34, 37, 0.92);
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   border-bottom-color: transparent;
 }
 
@@ -127,11 +129,11 @@ h1, h2, h3, h4 {
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(100% - 40px);
-  height: 76px;
+  top: 0;
+  height: calc(100% + 36px);
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(to bottom, rgba(32, 34, 37, 0.92) 0%, rgba(32, 34, 37, 0.65) 35%, rgba(32, 34, 37, 0.18) 68%, rgba(32, 34, 37, 0) 100%);
+  background: linear-gradient(to bottom, rgba(32, 34, 37, 0.92) 0%, rgba(32, 34, 37, 0.92) calc(100% - 76px), rgba(32, 34, 37, 0.6) calc(100% - 50px), rgba(32, 34, 37, 0.18) calc(100% - 24px), rgba(32, 34, 37, 0) 100%);
 }
 
 .logo {
