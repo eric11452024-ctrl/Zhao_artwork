@@ -117,6 +117,22 @@ h1, h2, h3, h4 {
   border-bottom: 1px solid var(--line);
 }
 
+.home .site-header {
+  border-bottom-color: transparent;
+}
+
+.home .site-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% - 28px);
+  height: 76px;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, var(--bg) 0%, rgba(12, 13, 14, 0.85) 35%, rgba(12, 13, 14, 0.35) 68%, rgba(12, 13, 14, 0) 100%);
+}
+
 .logo {
   font-size: 1.25rem;
   font-weight: 700;
