@@ -211,9 +211,22 @@ h1, h2, h3, h4 {
   z-index: 1;
 }
 
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, var(--bg), transparent clamp(48px, 7vw, 120px)),
+    linear-gradient(to top, var(--bg), transparent clamp(64px, 8vw, 140px)),
+    linear-gradient(to right, var(--bg), transparent clamp(24px, 5vw, 96px)),
+    linear-gradient(to left, var(--bg), transparent clamp(24px, 5vw, 96px));
+}
+
 .hero-overlay {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   width: 100%;
   padding: clamp(28px, 5vh, 56px) 6vw;
   background: linear-gradient(180deg, rgba(12, 13, 14, 0) 0%, rgba(12, 13, 14, 0.45) 35%, rgba(12, 13, 14, 0.9) 100%);
@@ -862,6 +875,16 @@ h1, h2, h3, h4 {
     position: relative;
     height: auto;
     object-fit: contain;
+  }
+
+  .hero::after {
+    bottom: auto;
+    aspect-ratio: 5082 / 2218;
+    background:
+      linear-gradient(to bottom, var(--bg), transparent 28px),
+      linear-gradient(to top, var(--bg-2), transparent 36px),
+      linear-gradient(to right, rgba(12, 13, 14, 0.65), transparent 18px),
+      linear-gradient(to left, rgba(12, 13, 14, 0.65), transparent 18px);
   }
 
   .hero-overlay {
