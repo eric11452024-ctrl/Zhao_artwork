@@ -248,6 +248,7 @@ h1, h2, h3, h4 {
 
 .hero-overlay {
   position: relative;
+  top: -24px;
   z-index: 3;
   width: 100%;
   padding: clamp(28px, 5vh, 56px) 6vw;
@@ -914,6 +915,7 @@ h1, h2, h3, h4 {
   }
 
   .hero-overlay {
+    top: 0;
     padding: 28px 24px 32px;
     background: var(--bg-2);
     border-bottom: 1px solid var(--line);
