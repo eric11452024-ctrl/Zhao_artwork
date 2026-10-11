@@ -273,28 +273,6 @@ h1, h2, h3, h4 {
   gap: 16px;
 }
 
-@media (min-width: 769px) {
-  .hero h1 {
-    font-size: clamp(48px, min(7.5vw, 12svh), 96px);
-    margin-bottom: 12px;
-  }
-
-  .hero .subtitle {
-    font-size: clamp(20px, min(2.5vw, 4svh), 30px);
-    max-width: 900px;
-    margin-bottom: 48px;
-  }
-
-  .hero-cta {
-    gap: 24px;
-  }
-
-  .hero-cta .btn {
-    font-size: clamp(16px, min(1.6vw, 3svh), 23px);
-    padding: 18px 36px;
-  }
-}
-
 /* ================= Buttons ================= */
 .btn {
   display: inline-flex;
