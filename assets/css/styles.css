@@ -238,6 +238,8 @@ h1, h2, h3, h4 {
     linear-gradient(to top, var(--bg), transparent clamp(64px, 8vw, 140px)),
     linear-gradient(to right, var(--bg), transparent clamp(24px, 5vw, 96px)),
     linear-gradient(to left, var(--bg), transparent clamp(24px, 5vw, 96px));
+  background-position: 0 0, 0 12px, 0 0, 0 0;
+  background-repeat: no-repeat;
 }
 
 .hero-overlay {
