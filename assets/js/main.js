@@ -83,6 +83,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Dummy project data (Replace with actual data or fetch from JSON)
   const projectsData = {
+    'cn-levelart-first': {
+      title: '国风场景｜场景美术练习',
+      category: '场景美术',
+      year: '待补充',
+      desc: '以国风室内空间为主题的场景展示。通过木构建筑、彩绘纹饰、悬挂灯饰与水景营造空间氛围。前三张展示不同视角的场景效果，后两张展示建筑模块、灯饰与水景等场景资产。',
+      role: ['待补充'],
+      tools: ['待补充'],
+      images: [
+        'artwork_picture/CN_LevelArt_first_1.webp',
+        'artwork_picture/CN_LevelArt_first_2.webp',
+        'artwork_picture/CN_LevelArt_first_3.webp',
+        'artwork_picture/CN_LevelArt_first_4.webp',
+        'artwork_picture/CN_LevelArt_first_5.webp',
+      ],
+    },
     'dragon-sculpt': {
       title: '龙｜雕刻练习',
       category: '雕刻类资产',
