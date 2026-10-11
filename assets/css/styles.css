@@ -118,6 +118,7 @@ h1, h2, h3, h4 {
 }
 
 .home .site-header {
+  margin-bottom: -73px;
   background: transparent;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
@@ -212,8 +213,8 @@ h1, h2, h3, h4 {
 .hero {
   position: relative;
   width: 100%;
-  height: min(56.25vw, calc(100vh - 76px));
-  height: min(56.25vw, calc(100svh - 76px));
+  height: 100vh;
+  height: 100svh;
   min-height: 360px;
   overflow: hidden;
   display: flex;
@@ -886,6 +887,10 @@ h1, h2, h3, h4 {
 }
 
 @media (max-width: 768px) {
+  .home .site-header {
+    margin-bottom: 0;
+  }
+
   .hero {
     display: block;
     height: auto;
