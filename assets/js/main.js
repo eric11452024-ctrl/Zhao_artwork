@@ -57,13 +57,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const parseYearMonth = (value) => { 
           if (!value) return 0;
+          if (/^\d{6}$/.test(value)) return Number(value);
           const [year, month = '0'] = value.split('.'); 
           return parseInt(year, 10) * 100 + parseInt(month, 10); 
         }; 
 
         cards.sort((a, b) => {
+          if (sortType === 'newest') {
+            const priorityDiff = Number(b.dataset.newestPriority || 0) - Number(a.dataset.newestPriority || 0);
+            if (priorityDiff) return priorityDiff;
+          }
+
           const yearA = parseYearMonth(a.dataset.year);
           const yearB = parseYearMonth(b.dataset.year);
+
+          // 未提供制作时间的作品放在有日期的作品之后。
+          if (!yearA || !yearB) return Number(!yearA) - Number(!yearB);
 
           if (sortType === 'newest') {
             return yearB - yearA; // 最新作品
