@@ -235,7 +235,7 @@ h1, h2, h3, h4 {
   pointer-events: none;
   background:
     linear-gradient(to bottom, var(--bg), transparent clamp(48px, 7vw, 120px)),
-    linear-gradient(to top, var(--bg), transparent clamp(64px, 8vw, 140px)),
+    linear-gradient(to top, rgba(12, 13, 14, 0.7), transparent clamp(64px, 8vw, 140px)),
     linear-gradient(to right, var(--bg), transparent clamp(24px, 5vw, 96px)),
     linear-gradient(to left, var(--bg), transparent clamp(24px, 5vw, 96px));
   background-position: 0 0, 0 12px, 0 0, 0 0;
@@ -247,7 +247,7 @@ h1, h2, h3, h4 {
   z-index: 3;
   width: 100%;
   padding: clamp(28px, 5vh, 56px) 6vw;
-  background: linear-gradient(180deg, rgba(12, 13, 14, 0) 0%, rgba(12, 13, 14, 0.45) 35%, rgba(12, 13, 14, 0.9) 100%);
+  background: radial-gradient(ellipse at left bottom, rgba(12, 13, 14, 0.8) 0%, rgba(12, 13, 14, 0.35) 42%, rgba(12, 13, 14, 0) 78%);
 }
 
 .hero h1 {
