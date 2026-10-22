@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (mediaItems.length > 0) {
         track.innerHTML = '';
         
-        mediaItems.forEach(item => { 
+        mediaItems.forEach((item, index) => {
           const slide = document.createElement('div'); 
           slide.className = 'carousel-item'; 
           const inner = document.createElement('div');
@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const img = document.createElement('img');
             img.src = item;
             img.alt = `${data.title} 展示图`;
-            img.loading = 'lazy';
+            img.loading = index === 0 ? 'eager' : 'lazy';
             inner.appendChild(img);
           } else if (item.type === 'viewer') { 
             slide.classList.add('is-viewer'); 
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (mediaItems.length > 1) {
           dotsContainer.innerHTML = mediaItems.map((_, i) => `
-            <div class="dot ${i === 0 ? 'active' : ''}" data-idx="${i}"></div>
+            <button type="button" class="dot ${i === 0 ? 'active' : ''}" data-idx="${i}" aria-label="查看第 ${i + 1} 项"></button>
           `).join('');
         } else {
           document.querySelector('.carousel-controls').style.display = 'none';
@@ -263,12 +263,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const updateCarousel = () => {
           const offset = getCarouselWidth() * currentIdx;
           track.style.transform = `translateX(-${offset}px)`;
+          track.dataset.index = String(currentIdx);
+          track.querySelectorAll('.carousel-item').forEach((slide, i) => {
+            slide.inert = i !== currentIdx;
+            slide.setAttribute('aria-hidden', String(i !== currentIdx));
+          });
           if (total > 1) {
             document.querySelectorAll('.dot').forEach((d, i) => {
               d.classList.toggle('active', i === currentIdx);
             });
           }
+          track.dispatchEvent(new CustomEvent('gallery:change', { detail: { index: currentIdx } }));
         };
+
+        track.addEventListener('gallery:select', event => {
+          const index = event.detail?.index;
+          if (!Number.isInteger(index) || index < 0 || index >= total) return;
+          currentIdx = index;
+          updateCarousel();
+        });
 
         document.getElementById('btnPrev')?.addEventListener('click', () => {
           currentIdx = (currentIdx - 1 + total) % total;
