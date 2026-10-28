@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const thumbnail = document.createElement('img');
       thumbnail.src = image.src;
       thumbnail.alt = '';
+      thumbnail.draggable = false;
       thumbnail.loading = 'lazy';
       button.append(thumbnail);
       button.setAttribute('aria-label', `查看第 ${index + 1} 张图片`);
@@ -76,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.append(dialog);
   dialog.querySelector('h2').textContent = projectName;
   const fullImage = dialog.querySelector('.lightbox-image');
+  fullImage.draggable = false;
   const stage = dialog.querySelector('.lightbox-stage');
   const error = dialog.querySelector('.lightbox-error');
   const close = dialog.querySelector('.lightbox-close');
@@ -88,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const thumbnail = document.createElement('img');
       thumbnail.src = item.image.src;
       thumbnail.alt = '';
+      thumbnail.draggable = false;
       thumbnail.loading = 'lazy';
       button.append(thumbnail);
     } else {
@@ -126,6 +129,10 @@ document.addEventListener('DOMContentLoaded', () => {
   frameHomes.forEach((home, frame) => frame.addEventListener('load', () => wireViewerEscape(frame)));
 
   async function show(index) {
+    const selection = window.getSelection();
+    if (selection && !selection.isCollapsed && (dialog.contains(selection.anchorNode) || dialog.contains(selection.focusNode))) {
+      selection.removeAllRanges();
+    }
     active = (index + items.length) % items.length;
     const ticket = ++revision;
     imageAnimation?.cancel();
@@ -210,6 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (index >= 0) open(index);
   });
   images.forEach((image, index) => {
+    image.draggable = false;
     image.tabIndex = 0;
     image.setAttribute('role', 'button');
     image.setAttribute('aria-label', `全屏鉴赏第 ${index + 1} 张图片`);

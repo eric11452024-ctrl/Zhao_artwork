@@ -1,4 +1,6 @@
 /* Fullscreen image viewing and thumbnail navigation. */
+.gallery-enhanced, .gallery-toolbar, .gallery-thumbnails, .art-lightbox { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+.gallery-enhanced img, .gallery-thumbnail img, .lightbox-image { -webkit-user-drag: none; }
 .gallery-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 0 14px; }
 .gallery-count { font: 12px/1.6 var(--font-mono); letter-spacing: .08em; color: var(--muted); }
 .gallery-open-button { border: 1px solid #b89b5e66; border-radius: 999px; background: #b89b5e0a; color: #e5ce9d; padding: 10px 20px; font: inherit; font-size: 13px; cursor: pointer; transition: background .3s; }

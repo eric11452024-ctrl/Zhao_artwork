@@ -18,10 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const hero = document.querySelector('.hero');
   const image = hero?.querySelector('.hero-bg-img');
   const title = hero?.querySelector('h1');
-  const progress = document.createElement('div');
-  progress.className = 'reading-progress';
-  progress.setAttribute('aria-hidden', 'true');
-  document.body.append(progress);
 
   if (hero) {
     const curtain = document.createElement('div');
@@ -47,15 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
     hero.querySelectorAll('.subtitle, .hero-cta').forEach((element, i) => animate(element,
       [{ opacity: 0, transform: 'translateY(25px)' }, { opacity: 1, transform: 'translateY(0)' }],
       { delay: 650 + i * 160, fill: 'backwards' }));
-    const featured = document.querySelector('.featured');
-    if (featured) {
-      featured.id ||= 'featured';
-      const cue = document.createElement('a');
-      cue.className = 'scroll-cue';
-      cue.href = '#' + featured.id;
-      cue.innerHTML = '<span>向下探索</span><i aria-hidden="true"></i>';
-      hero.append(cue);
-    }
   }
   animate(header, [{ opacity: 0, transform: 'translateY(-16px)' }, { opacity: 1, transform: 'translateY(0)' }], { delay: 350, fill: 'backwards' });
 
@@ -114,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, { threshold: .01, rootMargin: '0px 0px 48px 0px' }) : null;
   revealTargets.forEach(element => {
+    if (element.closest('.home-story')) return;
     if (observer && !reduced.matches && element.matches('.card')) {
       pendingCards.add(element);
       element.classList.add('motion-pending');
@@ -137,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     resets.push(reset);
     card.addEventListener('pointermove', event => {
+      if (card.closest('.home-story')) return;
       if (reduced.matches || !desktop.matches || event.pointerType === 'touch') return;
       // Do not add a second movement while the card is arriving.
       if (cardAnimations.has(card)) return;
@@ -160,10 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let scrollFrame = 0;
   function renderScroll() {
     scrollFrame = 0;
-    const distance = document.documentElement.scrollHeight - innerHeight;
-    progress.style.transform = `scaleX(${distance > 0 ? Math.min(1, Math.max(0, scrollY / distance)) : 0})`;
     header?.classList.toggle('is-scrolled', scrollY > 40);
-    if (image) {
+    if (image && !hero.closest('.home-story')) {
       const amount = !reduced.matches && desktop.matches ? Math.min(scrollY, hero.offsetHeight) * .15 : 0;
       image.style.translate = `0 ${amount}px`;
     }

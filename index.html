@@ -10,7 +10,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css?v=022ebad040">
   <link rel="stylesheet" href="assets/css/motion.css?v=d1286f8775">
-  <link rel="stylesheet" href="assets/css/gallery.css?v=c6adf96a70">
+  <link rel="stylesheet" href="assets/css/gallery.css?v=ad00c5f9c3">
+  <link rel="stylesheet" href="assets/css/home-stage.css?v=20261023-8">
+  <link rel="stylesheet" href="assets/css/featured-carousel.css?v=20261023-6">
 </head>
 <body class="home">
   <header class="site-header">
@@ -29,6 +31,7 @@
   </header>
 
   <main>
+    <div class="home-story">
     <!-- 首屏大图 -->
     <section class="hero">
       <img
@@ -44,23 +47,26 @@
         <h1>淇天大聖ZZQ</h1>
         <p class="subtitle">国风写实雕刻｜雕刻资产｜武器制作 </p>
         <div class="hero-cta">
-          <a href="works.html" class="btn btn-primary">进入作品</a>
+          <a href="#featured" class="btn btn-primary">进入作品</a>
           <a href="about.html" class="btn btn-ghost">关于我</a>
         </div>
       </div>
     </section>
 
     <!-- 精选作品（大图为主） -->
-    <section class="featured">
+    <div class="featured-wrap" id="featured">
+    <section class="featured" aria-labelledby="featured-title">
+      <div class="featured-artwork">
+      <div class="featured-content">
       <div class="section-head">
-        <h2>精选作品</h2>
+        <h2 id="featured-title">精选作品</h2>
         <a href="works.html" class="link-more">全部作品 →</a>
       </div>
 
       <div class="featured-grid">
         <!-- 替换为你的图片与信息 -->
         <a class="feature-card" href="project.html?id=cn-levelart-first">
-          <img src="artwork_picture/artwork_cover/CN_LevelArt_first_1_low.webp" alt="国风场景｜场景美术练习" width="960" height="480" loading="lazy">
+          <img src="artwork_picture/CN_LevelArt_first_1.webp" alt="国风场景｜场景美术练习" width="960" height="480" loading="lazy">
           <div class="feature-meta">
             <h3>国风场景｜场景美术练习</h3>
             <p>场景效果 · 资产展示</p>
@@ -68,7 +74,7 @@
         </a>
 
         <a class="feature-card" href="project.html?id=demon-blade">
-          <img src="artwork_picture/artwork_cover/test/sword_show1_low.webp" alt="永劫无间｜谪星狼主｜武器建模" loading="lazy">
+          <img src="artwork_picture/sword_show1.webp" alt="永劫无间｜谪星狼主｜武器建模" loading="lazy">
           <div class="feature-meta">
             <h3>永劫无间｜谪星狼主｜武器建模</h3>
             <p>武器设计</p>
@@ -76,14 +82,15 @@
         </a>
 
         <a class="feature-card" href="project.html?id=mechanism-relic">
-          <img src="artwork_picture/artwork_cover/test/biggun_show1_low.webp" alt="永劫无间｜莲心剑雨｜武器建模" loading="lazy">
+          <img src="artwork_picture/biggun_show1.webp" alt="永劫无间｜莲心剑雨｜武器建模" loading="lazy">
           <div class="feature-meta">
             <h3>永劫无间｜莲心剑雨｜武器建模</h3>
             <p>武器建模</p>
           </div>
         </a>
       </div>
-    </section>
+      </div>
+      </div>
 
     <!-- 简短介绍 -->
     <section class="intro">
@@ -98,14 +105,16 @@
         </ul>
       </div>
     </section>
+    </section>
+    </div>
+    </div>
   </main>
 
-  <footer class="site-footer">
-    <p>© 2026 Zhao. All rights reserved.</p>
-  </footer>
-
-  <script src="assets/js/main.js?v=4580b57d5c"></script>
-  <script src="assets/js/motion.js?v=0afa70270f" defer></script>
-  <script src="assets/js/gallery.js?v=db895b1af0" defer></script>
+  <script src="assets/js/main.js?v=49619895a7"></script>
+  <script src="assets/vendor/embla-carousel/embla-carousel.umd.js?v=8.6.0" defer></script>
+  <script src="assets/js/featured-carousel.js?v=20261023-2" defer></script>
+  <script src="assets/js/home-stage.js?v=20261023-6" defer></script>
+  <script src="assets/js/motion.js?v=20261023-2" defer></script>
+  <script src="assets/js/gallery.js?v=5826762e9c" defer></script>
 </body>
 </html>

@@ -1,0 +1,57 @@
+/* Preserve the original three-card composition; scale it as one unit. */
+html:has(.home-stage-active) { scroll-padding-top: var(--home-stage-header, 73px); }
+.home .featured-wrap { position: relative; scroll-margin-top: 0; }
+.home .featured-content { transform-origin: top center; }
+.home .featured-artwork { width: 100%; }
+.home .featured .section-head {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+.home .featured .section-head h2 { grid-column: 2; text-align: center; font-size: 44px; }
+.home .featured .section-head { margin-bottom: 24px; }
+.home .featured .link-more { grid-column: 3; justify-self: end; white-space: nowrap; }
+.home .featured .intro {
+  width: 100%; margin-top: 40px; padding: 20px 24px 0;
+  background: transparent; border-bottom: 0;
+}
+.home .featured .intro h2 { font-size: 20px; margin-bottom: 10px; }
+.home .featured .intro p { font-size: 14px; margin: 0 auto 14px; }
+.home .featured .intro .chips { gap: 8px; }
+.home .featured .intro .chips li { padding: 5px 12px; font-size: 12px; }
+@media (max-width: 480px) {
+  .home .featured .section-head h2 { font-size: 36px; }
+  .home .featured .section-head { grid-template-columns: 1fr; gap: 12px; }
+  .home .featured .section-head h2, .home .featured .link-more { grid-column: 1; justify-self: center; }
+}
+
+@media (min-width: 769px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
+  .home-stage-active .featured-wrap { min-height: 140svh; }
+  .home-stage-active .featured {
+    position: sticky;
+    top: var(--home-stage-header, 73px);
+    height: calc(100svh - var(--home-stage-header, 73px));
+    padding: calc(clamp(40px, 8vh, 96px) + clamp(24px, 5.2vh, 64px) - var(--featured-top-shift, 0px)) 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 3vh, 36px);
+    align-items: center;
+    justify-content: flex-start;
+    overflow: clip;
+  }
+  .home-stage-active .featured-artwork {
+    flex: none;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    height: var(--featured-artwork-height, auto);
+  }
+  .home-stage-active .featured .intro { flex: none; margin-top: auto; }
+  .home-stage-active .featured-content {
+    flex: none;
+    width: min(1200px, calc(100% - 48px));
+    transform: scale(var(--featured-scale, 1));
+    will-change: transform;
+  }
+  .home-stage-active .featured-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

@@ -4,10 +4,27 @@
 <head>
     <title></title>
     <script src="https://viewer.marmoset.co/main/marmoset.js"></script>
+    <style>
+        html, body, canvas { -webkit-user-select: none; user-select: none; }
+        input, textarea, [contenteditable="true"] { -webkit-user-select: text; user-select: text; }
+    </style>
 </head>
 <body>
     <script>
-        marmoset.embed( 'clock_3D.mview', { width: 800, height: 600, autoStart: true, fullFrame: true, pagePreset: false } );
+        const viewer = marmoset.embed( 'clock_3D.mview', { width: 800, height: 600, autoStart: true, fullFrame: true, pagePreset: false } );
+        // Fullscreen can resize the iframe before the model has finished loading.
+        const resizeViewer = viewer.resize.bind(viewer);
+        let pendingSize = null;
+        viewer.resize = function (width, height) {
+            if (!viewer.scene) { pendingSize = [width, height]; return; }
+            resizeViewer(width, height);
+        };
+        viewer.onLoad = function () {
+            if (!pendingSize) return;
+            const size = pendingSize;
+            pendingSize = null;
+            viewer.resize(...size);
+        };
     </script>
 </body>
 </html>

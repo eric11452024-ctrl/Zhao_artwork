@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
           } else if (item.type === 'viewer') { 
             slide.classList.add('is-viewer'); 
             const iframe = document.createElement('iframe');
-            iframe.src = item.src;
+            iframe.src = `${item.src}?v=20261022-selection-fix`;
             iframe.title = `${data.title} 3D Viewer`;
             iframe.loading = 'lazy';
             iframe.allowFullscreen = true;
