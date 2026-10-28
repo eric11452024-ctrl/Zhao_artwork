@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const section = wrap.querySelector('.featured');
   const intro = section.querySelector('.intro');
   const header = document.querySelector('.site-header');
-  const enabled = matchMedia('(min-width: 769px) and (min-height: 600px) and (prefers-reduced-motion: no-preference)');
+  // Keep desktop page transitions available in shorter browser windows too.
+  const enabled = matchMedia('(min-width: 769px)');
   let transitionFrame = 0;
   let animating = false;
   let pageIndex = 0;
