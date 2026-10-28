@@ -1,5 +1,9 @@
-/* Preserve the original three-card composition; scale it as one unit. */
-html:has(.home-stage-active) { scroll-padding-top: var(--home-stage-header, 73px); }
+/* Two full-screen home sections; the carousel keeps its final display size. */
+html:has(.home-stage-active) {
+  scroll-padding-top: var(--home-stage-header, 73px);
+  scroll-behavior: auto;
+  overscroll-behavior-y: none;
+}
 .home .featured-wrap { position: relative; scroll-margin-top: 0; }
 .home .featured-content { transform-origin: top center; }
 .home .featured-artwork { width: 100%; }
@@ -26,10 +30,9 @@ html:has(.home-stage-active) { scroll-padding-top: var(--home-stage-header, 73px
 }
 
 @media (min-width: 769px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
-  .home-stage-active .featured-wrap { min-height: 140svh; }
+  .home-stage-active .featured-wrap { min-height: calc(100svh - var(--home-stage-header, 73px)); }
   .home-stage-active .featured {
-    position: sticky;
-    top: var(--home-stage-header, 73px);
+    position: relative;
     height: calc(100svh - var(--home-stage-header, 73px));
     padding: calc(clamp(40px, 8vh, 96px) + clamp(24px, 5.2vh, 64px) - var(--featured-top-shift, 0px)) 0 24px;
     display: flex;
@@ -51,7 +54,6 @@ html:has(.home-stage-active) { scroll-padding-top: var(--home-stage-header, 73px
     flex: none;
     width: min(1200px, calc(100% - 48px));
     transform: scale(var(--featured-scale, 1));
-    will-change: transform;
   }
   .home-stage-active .featured-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
