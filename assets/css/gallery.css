@@ -1,4 +1,7 @@
 /* Fullscreen image viewing and thumbnail navigation. */
+img[data-media-src]:not([src]) { visibility: hidden; }
+.carousel-item video { width: 100%; height: 100%; object-fit: contain; background: #000; }
+video.lightbox-viewer { object-fit: contain; }
 .gallery-enhanced, .gallery-toolbar, .gallery-thumbnails, .art-lightbox { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
 .gallery-enhanced img, .gallery-thumbnail img, .lightbox-image { -webkit-user-drag: none; }
 .gallery-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 0 14px; }

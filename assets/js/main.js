@@ -3,6 +3,10 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  const setMediaSource = (element, source) => {
+    if (window.createPortfolioMediaLoader) element.dataset.mediaSrc = source;
+    else element.src = source;
+  };
   // ================= Navigation Toggle =================
   const navToggle = document.querySelector('.nav-toggle');
   const navList = document.querySelector('.nav ul');
@@ -225,19 +229,27 @@ document.addEventListener('DOMContentLoaded', () => {
         
           if (typeof item === 'string') { 
             const img = document.createElement('img');
-            img.src = item;
+            setMediaSource(img, item);
             img.alt = `${data.title} 展示图`;
             img.loading = index === 0 ? 'eager' : 'lazy';
             inner.appendChild(img);
           } else if (item.type === 'viewer') { 
             slide.classList.add('is-viewer'); 
             const iframe = document.createElement('iframe');
-            iframe.src = `${item.src}?v=20261022-selection-fix`;
+            setMediaSource(iframe, `${item.src}?v=20261022-selection-fix`);
             iframe.title = `${data.title} 3D Viewer`;
             iframe.loading = 'lazy';
             iframe.allowFullscreen = true;
             inner.appendChild(iframe);
-          } 
+          } else if (item.type === 'video') {
+            const video = document.createElement('video');
+            video.controls = true;
+            video.playsInline = true;
+            video.preload = 'none';
+            if (item.poster) video.poster = item.poster;
+            setMediaSource(video, item.src);
+            inner.appendChild(video);
+          }
 
           slide.appendChild(inner);
           track.appendChild(slide); 
@@ -313,9 +325,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Populate Gallery
     const gallery = document.getElementById('projectGallery');
     if (gallery && data.gallery && data.gallery.length > 0) {
-      gallery.innerHTML = data.gallery.map(img => `
-        <img src="${img}" alt="${data.title} 过程/细节图" loading="lazy">
-      `).join('');
+      gallery.replaceChildren(...data.gallery.map(source => {
+        const image = document.createElement('img');
+        image.alt = `${data.title} 过程/细节图`;
+        image.loading = 'lazy';
+        setMediaSource(image, source);
+        return image;
+      }));
     } else if (gallery) {
       gallery.style.display = 'none';
     }
@@ -326,6 +342,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('projectSub').textContent = '请返回列表重新选择';
     document.querySelector('.project-media').style.display = 'none';
     document.querySelector('.project-info').style.display = 'none';
+  }
+  const mediaRoot = document.querySelector('.home-story, main.project');
+  if (mediaRoot && window.createPortfolioMediaLoader) {
+    window.portfolioMedia = window.createPortfolioMediaLoader(mediaRoot);
+  } else if (mediaRoot) {
+    mediaRoot.querySelectorAll('[data-media-src]').forEach(element => {
+      element.src = element.dataset.mediaSrc;
+    });
   }
 });
 

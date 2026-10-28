@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const easing = 'cubic-bezier(.22,.61,.36,1)';
   const track = document.getElementById('carouselTrack');
   const images = track ? Array.from(track.querySelectorAll('.carousel-item img')) : [];
-  if (!images.length) return;
+  if (!track || !track.querySelector('img, video, iframe')) return;
   const media = document.querySelector('.project-media');
   const carousel = document.getElementById('mediaCarousel');
   carousel.classList.add('gallery-enhanced');
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const slides = Array.from(track.children);
   const items = slides.map((slide, slideIndex) => ({
     image: slide.querySelector('img'),
-    frame: slide.querySelector('iframe'),
+    frame: slide.querySelector('iframe, video'),
     slideIndex
   })).filter(item => item.image || item.frame);
   const frameHomes = new Map(items.filter(item => item.frame).map(item => [item.frame, item.frame.parentElement]));
@@ -55,15 +55,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const image = slide.querySelector('img');
     if (image) {
       const thumbnail = document.createElement('img');
-      thumbnail.src = image.src;
+      if (window.portfolioMedia) window.portfolioMedia.thumbnail(image, thumbnail);
+      else thumbnail.src = image.src;
       thumbnail.alt = '';
       thumbnail.draggable = false;
       thumbnail.loading = 'lazy';
       button.append(thumbnail);
       button.setAttribute('aria-label', `查看第 ${index + 1} 张图片`);
     } else {
-      button.textContent = '3D';
-      button.setAttribute('aria-label', '打开交互式 3D 展示');
+      const video = slide.querySelector('video');
+      button.textContent = video ? '视频' : '3D';
+      button.setAttribute('aria-label', video ? '播放作品视频' : '打开交互式 3D 展示');
     }
     button.addEventListener('click', () => track.dispatchEvent(new CustomEvent('gallery:select', { detail: { index } })));
     strip.append(button);
@@ -85,16 +87,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'gallery-thumbnail';
-    button.setAttribute('aria-label', item.frame ? '查看交互式 3D 模型' : `查看第 ${index + 1} 张图片`);
+    const video = item.frame?.tagName === 'VIDEO';
+    button.setAttribute('aria-label', item.frame ? (video ? '播放作品视频' : '查看交互式 3D 模型') : `查看第 ${index + 1} 张图片`);
     if (item.image) {
       const thumbnail = document.createElement('img');
-      thumbnail.src = item.image.src;
+      if (window.portfolioMedia) window.portfolioMedia.thumbnail(item.image, thumbnail);
+      else thumbnail.src = item.image.src;
       thumbnail.alt = '';
       thumbnail.draggable = false;
       thumbnail.loading = 'lazy';
       button.append(thumbnail);
     } else {
-      button.textContent = '3D';
+      button.textContent = video ? '视频' : '3D';
       button.classList.add('gallery-thumbnail-3d');
     }
     button.addEventListener('click', () => show(index));
@@ -112,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function restoreViewers(except) {
     frameHomes.forEach((home, frame) => {
       if (frame === except) return;
+      if (frame.tagName === 'VIDEO') frame.pause();
       if (frame.parentElement !== home) moveFrame(frame, home);
       frame.classList.remove('lightbox-viewer');
     });
@@ -144,8 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
     stage.classList.toggle('is-viewer', Boolean(item.frame));
     error.hidden = true;
     stage.setAttribute('aria-busy', 'true');
-    dialog.querySelector('.lightbox-counter').textContent = `${String(active + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}${item.frame ? ' · 3D' : ''}`;
-    dialog.querySelector('.lightbox-hint').textContent = item.frame ? '拖动旋转 · 滚轮缩放' : '← → 切换 · Esc 关闭';
+    const video = item.frame?.tagName === 'VIDEO';
+    dialog.querySelector('.lightbox-counter').textContent = `${String(active + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}${item.frame ? (video ? ' · 视频' : ' · 3D') : ''}`;
+    dialog.querySelector('.lightbox-hint').textContent = item.frame ? (video ? '使用播放控件观看视频' : '拖动旋转 · 滚轮缩放') : '← → 切换 · Esc 关闭';
     thumbs.forEach((button, i) => button.setAttribute('aria-pressed', String(i === active)));
     thumbs[active].scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'instant' });
     if (item.frame) {
@@ -154,13 +160,15 @@ document.addEventListener('DOMContentLoaded', () => {
       stage.querySelectorAll('.lightbox-previous').forEach(image => image.remove());
       item.frame.classList.add('lightbox-viewer');
       moveFrame(item.frame, stage);
+      window.portfolioMedia?.prioritize(item.frame);
       wireViewerEscape(item.frame);
       stage.setAttribute('aria-busy', 'false');
       return;
     }
-    const loaded = new Image();
-    loaded.src = source.src;
+    const loaded = source;
     try {
+      await window.portfolioMedia?.prioritize(source);
+      if (ticket !== revision || !dialog.open) return;
       await loaded.decode();
       if (ticket !== revision || !dialog.open) return;
       stage.querySelectorAll('.lightbox-previous').forEach(image => image.remove());
@@ -208,7 +216,8 @@ document.addEventListener('DOMContentLoaded', () => {
     current = Number(track.dataset.index || 0);
     const source = slides[current]?.querySelector('img');
     openButton.hidden = false;
-    count.textContent = source ? `${String(current + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')} · 点击图片放大` : '3D · 拖动旋转模型';
+    const video = slides[current]?.querySelector('video');
+    count.textContent = source ? `${String(current + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')} · 点击图片放大` : video ? '视频 · 使用播放控件观看' : '3D · 拖动旋转模型';
     inlineThumbs.forEach((button, i) => button.setAttribute('aria-pressed', String(i === current)));
   }
   track.addEventListener('gallery:change', sync);

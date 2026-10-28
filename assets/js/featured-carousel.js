@@ -37,11 +37,17 @@ document.addEventListener('DOMContentLoaded', () => {
     dot.type = 'button';
     dot.setAttribute('aria-label', `展示${card.querySelector('h3').textContent}`);
     controls.querySelector('.featured-carousel-dots').append(dot);
-    dot.addEventListener('click', () => api.scrollTo(index, reduced.matches));
+    dot.addEventListener('click', () => {
+      api.scrollTo(index, reduced.matches);
+      prioritizeSelected();
+    });
     return dot;
   });
   // Embla uses a physics duration rather than milliseconds; 30 gives an approximately 0.6s transition.
   const api = EmblaCarousel(viewport, { loop: true, align: 'center', duration: 30 });
+  function prioritizeSelected() {
+    window.portfolioMedia?.prioritize(cards[api.selectedScrollSnap()].querySelector('img'));
+  }
   const dwellTime = 2000;
   let autoplayTimer = 0;
   let hovering = false;
@@ -69,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
   root.addEventListener('click', scheduleAutoplay);
   document.addEventListener('visibilitychange', scheduleAutoplay);
   api.on('pointerDown', () => { dragging = true; stopAutoplay(); })
-    .on('pointerUp', () => { dragging = false; scheduleAutoplay(); })
+    .on('pointerUp', () => { dragging = false; prioritizeSelected(); scheduleAutoplay(); })
     .on('scroll', () => { moving = true; stopAutoplay(); })
     .on('settle', () => { moving = false; scheduleAutoplay(); })
     .on('reInit', () => { moving = false; scheduleAutoplay(); })
@@ -103,14 +109,15 @@ document.addEventListener('DOMContentLoaded', () => {
     tween();
   }
   const arrows = controls.querySelectorAll('.featured-carousel-arrow');
-  arrows[0].addEventListener('click', () => api.scrollPrev(reduced.matches));
-  arrows[1].addEventListener('click', () => api.scrollNext(reduced.matches));
+  arrows[0].addEventListener('click', () => { api.scrollPrev(reduced.matches); prioritizeSelected(); });
+  arrows[1].addEventListener('click', () => { api.scrollNext(reduced.matches); prioritizeSelected(); });
   root.addEventListener('keydown', event => {
     if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
     event.preventDefault();
     if (event.key === 'ArrowLeft') api.scrollPrev(reduced.matches);
     else api.scrollNext(reduced.matches);
+    prioritizeSelected();
     if (event.target.closest('.feature-card')) cards[api.selectedScrollSnap()].focus({ preventScroll: true });
   });
   cards.forEach((card, index) => card.addEventListener('click', event => {
@@ -118,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (index !== api.selectedScrollSnap() && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) {
       event.preventDefault();
       api.scrollTo(index, reduced.matches);
+      prioritizeSelected();
     }
   }));
   api.on('scroll', tween).on('select', select).on('reInit', select);
