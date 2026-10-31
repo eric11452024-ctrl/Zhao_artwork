@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="assets/css/gallery.css?v=127f3f7c57">
   <link rel="stylesheet" href="assets/css/home-stage.css?v=290fa0bdf0">
   <link rel="stylesheet" href="assets/css/featured-carousel.css?v=20261023-6">
+  <link rel="stylesheet" href="assets/css/hero-video.css?v=fa45a780d9">
 </head>
 <body class="home">
   <header class="site-header">
@@ -32,17 +33,21 @@
 
   <main>
     <div class="home-story">
-    <!-- 首屏大图 -->
+    <!-- 视频首屏：静态封面先显示，视频就绪后交替播放。 -->
     <section class="hero">
+      <div class="hero-visual">
       <img
-        src="artwork_picture/hero-scene-1920.webp"
-        srcset="artwork_picture/hero-scene-1280.webp 1280w, artwork_picture/hero-scene-1920.webp 1920w, artwork_picture/hero-scene-2560.webp 2560w"
+        src="artwork_picture/hero-video-poster-1920.webp"
+        srcset="artwork_picture/hero-video-poster-1280.webp 1280w, artwork_picture/hero-video-poster-1920.webp 1920w"
         sizes="100vw"
-        width="1920" height="838"
+        width="1920" height="1080"
         alt="国风室内场景：彩绘木构、悬挂灯饰与水景"
         class="hero-bg-img"
         loading="eager" fetchpriority="high"
       />
+      <video class="hero-video" data-hero-src="assets/video/hero-scene-1.mp4" muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+      <video class="hero-video" data-hero-src="assets/video/hero-scene-2.mp4" muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+      </div>
       <div class="hero-overlay">
         <h1>淇天大聖ZZQ</h1>
         <p class="subtitle">国风写实雕刻｜雕刻资产｜武器制作 </p>
@@ -51,6 +56,7 @@
           <a href="about.html" class="btn btn-ghost">关于我</a>
         </div>
       </div>
+      <button class="hero-video-toggle" type="button" hidden>点击切换为静态封面</button>
     </section>
 
     <!-- 精选作品（大图为主） -->
@@ -114,7 +120,8 @@
   </main>
 
   <noscript><style>img[data-media-src] { display: none; }</style></noscript>
-  <script src="assets/js/media-loader.js?v=96e1f12889"></script>
+  <script src="assets/js/media-loader.js?v=c6f0271086"></script>
+  <script src="assets/js/hero-video.js?v=c09a761496"></script>
   <script src="assets/js/main.js?v=ed1ca49f93"></script>
   <script src="assets/vendor/embla-carousel/embla-carousel.umd.js?v=8.6.0" defer></script>
   <script src="assets/js/featured-carousel.js?v=54fb418b19" defer></script>

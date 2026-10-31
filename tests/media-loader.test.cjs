@@ -6,6 +6,19 @@ const vm = require('node:vm');
 
 const source = fs.readFileSync(path.join(__dirname, '../assets/js/media-loader.js'), 'utf8');
 
+test('home cover video readiness gates background pictures after the poster', async () => {
+  const f = fixture();
+  const query = f.root.querySelector.bind(f.root);
+  f.root.querySelector = selector => selector === '.hero-visual' ? {} : query(selector);
+  let release;
+  f.window.heroVideoPlayback = { ready: new Promise(resolve => { release = resolve; }) };
+  await flush();
+  f.media[0].ready(); await flush();
+  assert.equal(f.media[1].getAttribute('src'), null);
+  release(); await flush();
+  assert.equal(f.media[1].dataset.mediaState, 'loading');
+});
+
 async function flush() {
   // Drain the real promise continuations used by the loader's async workers.
   for (let i = 0; i < 20; i++) await Promise.resolve();

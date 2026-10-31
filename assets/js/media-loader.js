@@ -95,6 +95,7 @@
     async function run() {
       if (!await available()) return;
       if (first) await load(first, true);
+      if (root.querySelector('.hero-visual')) await window.heroVideoPlayback?.ready;
       // Adjacent slides precede the rest, with a maximum of two background images.
       const adjacent = track ? [track.children[1], track.lastElementChild]
         .map(slide => slide?.querySelector('img')).filter(Boolean) : [];
