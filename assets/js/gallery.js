@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   'use strict';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const easing = 'cubic-bezier(.22,.61,.36,1)';
+  const duration = { open: 420, change: 280, close: 180 };
   const track = document.getElementById('carouselTrack');
   const images = track ? Array.from(track.querySelectorAll('.carousel-item img')) : [];
   if (!track || !track.querySelector('img, video, iframe')) return;
@@ -26,12 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
   let revision = 0;
   let lastFocus = null;
   let imageAnimation;
-  let openingRect = null;
+  let fadeAnimation;
+  let dialogAnimation;
+  let closing = false;
+  let openingImage = false;
   if (!reduced.matches && media.animate) {
-    media.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, easing });
+    media.animate([{ opacity: .3 }, { opacity: 1 }], { duration: duration.open, easing });
     document.querySelector('.project-head')?.animate([
-      { opacity: 0, translate: '0 12px' }, { opacity: 1, translate: '0 0' }
-    ], { duration: 700, delay: 180, easing, fill: 'backwards' });
+      { opacity: .3 }, { opacity: 1 }
+    ], { duration: duration.open, easing });
   }
 
   const toolbar = document.createElement('div');
@@ -127,20 +131,47 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!doc || doc.documentElement.dataset.galleryEscape) return;
       doc.documentElement.dataset.galleryEscape = 'true';
       doc.addEventListener('keydown', event => {
-        if (event.key === 'Escape' && dialog.open) { event.preventDefault(); dialog.close(); }
+        if (event.key === 'Escape' && dialog.open) { event.preventDefault(); requestClose(); }
       });
     } catch { /* The visible close button remains available for isolated local-file viewers. */ }
   }
   frameHomes.forEach((home, frame) => frame.addEventListener('load', () => wireViewerEscape(frame)));
 
+  function revealThumbnail(button, container) {
+    const bounds = button.getBoundingClientRect();
+    const viewport = container.getBoundingClientRect();
+    // Scroll only this strip; scrollIntoView can also move the page behind the dialog.
+    if (bounds.left < viewport.left) container.scrollBy({ left: bounds.left - viewport.left - 8, behavior: 'instant' });
+    else if (bounds.right > viewport.right) container.scrollBy({ left: bounds.right - viewport.right + 8, behavior: 'instant' });
+  }
+  function clearImageMotion() {
+    imageAnimation?.cancel();
+    fadeAnimation?.cancel();
+    stage.querySelectorAll('.lightbox-previous').forEach(image => image.remove());
+  }
+  function requestClose() {
+    if (!dialog.open || closing) return;
+    closing = true;
+    const ticket = ++revision;
+    clearImageMotion();
+    dialogAnimation?.cancel();
+    if (reduced.matches || !dialog.animate) { dialog.close(); return; }
+    dialogAnimation = dialog.animate([{ opacity: 1 }, { opacity: 0 }], { duration: duration.close, easing });
+    const finish = () => { if (closing && ticket === revision && dialog.open) dialog.close(); };
+    dialogAnimation.finished.then(finish, finish);
+  }
+
   async function show(index) {
+    if (closing) return;
     const selection = window.getSelection();
     if (selection && !selection.isCollapsed && (dialog.contains(selection.anchorNode) || dialog.contains(selection.focusNode))) {
       selection.removeAllRanges();
     }
     active = (index + items.length) % items.length;
     const ticket = ++revision;
-    imageAnimation?.cancel();
+    clearImageMotion();
+    const opening = openingImage;
+    openingImage = false;
     // Load separately so rapid switching cannot display an out-of-date image.
     const item = items[active];
     const source = item.image;
@@ -153,9 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
     dialog.querySelector('.lightbox-counter').textContent = `${String(active + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}${item.frame ? (video ? ' · 视频' : ' · 3D') : ''}`;
     dialog.querySelector('.lightbox-hint').textContent = item.frame ? (video ? '使用播放控件观看视频' : '拖动旋转 · 滚轮缩放') : '← → 切换 · Esc 关闭';
     thumbs.forEach((button, i) => button.setAttribute('aria-pressed', String(i === active)));
-    thumbs[active].scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'instant' });
+    revealThumbnail(thumbs[active], dialog.querySelector('.lightbox-thumbnails'));
     if (item.frame) {
-      openingRect = null;
       fullImage.style.opacity = '0';
       stage.querySelectorAll('.lightbox-previous').forEach(image => image.remove());
       item.frame.classList.add('lightbox-viewer');
@@ -171,32 +201,21 @@ document.addEventListener('DOMContentLoaded', () => {
       if (ticket !== revision || !dialog.open) return;
       await loaded.decode();
       if (ticket !== revision || !dialog.open) return;
-      stage.querySelectorAll('.lightbox-previous').forEach(image => image.remove());
-      if (fullImage.getAttribute('src') && fullImage.style.opacity !== '0' && !reduced.matches && fullImage.animate) {
+      const crossfade = !opening && fullImage.getAttribute('src') && fullImage.style.opacity !== '0' && !reduced.matches && fullImage.animate;
+      if (crossfade) {
         const previous = fullImage.cloneNode();
         previous.className = 'lightbox-image lightbox-previous';
         previous.setAttribute('aria-hidden', 'true');
         stage.append(previous);
-        const fade = previous.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 500, easing, fill: 'forwards' });
-        fade.finished.then(() => previous.remove(), () => previous.remove());
+        fadeAnimation = previous.animate([{ opacity: 1 }, { opacity: 0 }], { duration: duration.change, easing });
+        fadeAnimation.finished.then(() => previous.remove(), () => previous.remove());
       }
       fullImage.src = source.src;
-      fullImage.alt = `${projectName}，第 ${active + 1} 张，共 ${images.length} 张`;
+      fullImage.alt = `${projectName}，第 ${images.indexOf(source) + 1} 张，共 ${images.length} 张`;
       fullImage.style.opacity = '1';
-      if (!reduced.matches && fullImage.animate) {
-        let initial = { opacity: 0, transform: 'scale(.975)' };
-        if (openingRect?.width) {
-          const bounds = fullImage.getBoundingClientRect();
-          const fittedWidth = Math.min(bounds.width, bounds.height * loaded.naturalWidth / loaded.naturalHeight);
-          if (fittedWidth > 0) {
-            const dx = openingRect.left + openingRect.width / 2 - bounds.left - bounds.width / 2;
-            const dy = openingRect.top + openingRect.height / 2 - bounds.top - bounds.height / 2;
-            initial = { opacity: .3, transform: `translate(${dx}px, ${dy}px) scale(${openingRect.width / fittedWidth})` };
-          }
-        }
-        imageAnimation = fullImage.animate([initial, { opacity: 1, transform: 'translate(0,0) scale(1)' }], { duration: openingRect ? 720 : 550, easing });
+      if (!crossfade && !reduced.matches && fullImage.animate) {
+        imageAnimation = fullImage.animate([{ opacity: 0 }, { opacity: 1 }], { duration: opening ? duration.open : duration.change, easing });
       }
-      openingRect = null;
     } catch {
       if (ticket === revision && dialog.open) { error.hidden = false; fullImage.style.opacity = '0'; }
     } finally {
@@ -204,9 +223,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   function open(index) {
+    if (closing) return;
     lastFocus = document.activeElement;
-    openingRect = items[index].image?.getBoundingClientRect() || null;
+    openingImage = true;
     if (!dialog.open) dialog.showModal();
+    if (!reduced.matches && dialog.animate) {
+      dialogAnimation = dialog.animate([{ opacity: 0 }, { opacity: 1 }], { duration: duration.close, easing });
+    }
     document.body.classList.add('gallery-is-open');
     fullImage.style.opacity = '0';
     close.focus();
@@ -219,6 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const video = slides[current]?.querySelector('video');
     count.textContent = source ? `${String(current + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')} · 点击图片放大` : video ? '视频 · 使用播放控件观看' : '3D · 拖动旋转模型';
     inlineThumbs.forEach((button, i) => button.setAttribute('aria-pressed', String(i === current)));
+    if (inlineThumbs[current]) revealThumbnail(inlineThumbs[current], strip);
   }
   track.addEventListener('gallery:change', sync);
   openButton.addEventListener('click', () => {
@@ -236,7 +260,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open(itemIndex); }
     });
   });
-  close.addEventListener('click', () => dialog.close());
+  close.addEventListener('click', requestClose);
+  dialog.addEventListener('cancel', event => { event.preventDefault(); requestClose(); });
   dialog.querySelector('.lightbox-prev').addEventListener('click', () => show(active - 1));
   dialog.querySelector('.lightbox-next').addEventListener('click', () => show(active + 1));
   dialog.querySelector('.lightbox-prev').hidden = dialog.querySelector('.lightbox-next').hidden = items.length < 2;
@@ -259,8 +284,10 @@ document.addEventListener('DOMContentLoaded', () => {
   stage.addEventListener('pointercancel', () => { touchStart = null; });
   dialog.addEventListener('close', () => {
     revision++;
-    stage.querySelectorAll('.lightbox-previous').forEach(image => image.remove());
-    imageAnimation?.cancel();
+    closing = false;
+    openingImage = false;
+    clearImageMotion();
+    dialogAnimation?.cancel();
     restoreViewers();
     document.body.classList.remove('gallery-is-open');
     const index = items[active].slideIndex;
@@ -268,6 +295,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (lastFocus?.isConnected && !lastFocus.closest('[inert]')) lastFocus.focus({ preventScroll: true });
     else openButton.focus({ preventScroll: true });
   });
-  reduced.addEventListener('change', () => { if (reduced.matches) imageAnimation?.cancel(); });
+  reduced.addEventListener('change', () => {
+    if (!reduced.matches) return;
+    clearImageMotion();
+    dialogAnimation?.cancel();
+    if (closing && dialog.open) dialog.close();
+  });
   sync();
 });

@@ -83,6 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.unobserve(element);
         return;
       }
+      if (element.matches('.project-info')) {
+        animate(element, [{ opacity: .4 }, { opacity: 1 }], { duration: 420 });
+        observer.unobserve(element);
+        return;
+      }
       if (element.matches('.card')) {
         // Filtering can consume an already queued intersection. Do not reveal twice.
         if (pendingCards.has(element)) {
@@ -109,43 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
     observer?.observe(element);
   });
 
-  const cards = document.querySelectorAll('.feature-card, .card');
-  const resets = [];
-  cards.forEach(card => {
-    let frame = 0;
-    let hoverBounds = null;
-    const reset = () => {
-      cancelAnimationFrame(frame);
-      frame = 0;
-      hoverBounds = null;
-      card.style.removeProperty('transform');
-      card.style.removeProperty('--light-x');
-      card.style.removeProperty('--light-y');
-      card.classList.remove('is-tilting');
-    };
-    resets.push(reset);
-    card.addEventListener('pointermove', event => {
-      if (card.closest('.home-story')) return;
-      if (reduced.matches || !desktop.matches || event.pointerType === 'touch') return;
-      // Do not add a second movement while the card is arriving.
-      if (cardAnimations.has(card)) return;
-      // Measure the resting card once; measuring the tilted card feeds back into its angle.
-      const bounds = hoverBounds ||= card.getBoundingClientRect();
-      const x = Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width));
-      const y = Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height));
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        card.classList.add('is-tilting');
-        card.style.setProperty('--light-x', `${x * 100}%`);
-        card.style.setProperty('--light-y', `${y * 100}%`);
-        card.style.transform = `perspective(1100px) rotateX(${(0.5 - y) * 6}deg) rotateY(${(x - 0.5) * 8}deg) translateY(-6px)`;
-      });
-    });
-    card.addEventListener('pointerleave', reset);
-    card.addEventListener('pointercancel', reset);
-    card.addEventListener('blur', reset);
-  });
-
   let scrollFrame = 0;
   function renderScroll() {
     scrollFrame = 0;
@@ -164,7 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
     animations.forEach(animation => animation.cancel());
     pendingCards.forEach(card => card.classList.remove('motion-pending'));
     pendingCards.clear();
-    resets.forEach(reset => reset());
     renderScroll();
   }
   reduced.addEventListener('change', preferenceChanged);
@@ -182,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!chip || chip.dataset.filter === lastFilter) return;
         lastFilter = chip.dataset.filter;
       }
-      resets.forEach(reset => reset());
       document.querySelectorAll('.card.hidden').forEach(card => cardAnimations.get(card)?.cancel());
       document.querySelectorAll('.card:not(.hidden)').forEach((card, i) => revealCard(card, i % 3, true));
     });
